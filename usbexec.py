@@ -19,13 +19,16 @@ configs = [
   ExecConfig(('SecureROM for t8010si, Copyright 2007-2015, Apple Inc.', 'ROMRELEASE',  'iBoot-2696.0.0.1.33'),   aes_crypto_cmd=0x10000C8F4),
   ExecConfig(('SecureROM for t8011si, Copyright 2007-2015, Apple Inc.', 'ROMRELEASE',  'iBoot-3135.0.0.2.3'),    aes_crypto_cmd=0x10000C994),
   ExecConfig(('SecureROM for t8015si, Copyright 2007-2016, Apple Inc.', 'ROMRELEASE',  'iBoot-3332.0.0.1.23'),   aes_crypto_cmd=0x100009E9C),
+  ExecConfig(('SecureROM for s8000si, Copyright 2007-2014, Apple Inc.', 'RELEASE',     'iBoot-2234.0.0.3.3'),    aes_crypto_cmd=0x10000DAA0),
+  ExecConfig(('SecureROM for s8003si, Copyright 2007-2014, Apple Inc.', 'RELEASE',     'iBoot-2234.0.0.2.22'),   aes_crypto_cmd=0x10000DAA0),
+  ExecConfig(('SecureROM for t7000si, Copyright 2013, Apple Inc.',      'RELEASE',     'iBoot-1992.0.0.1.19'),   aes_crypto_cmd=0x10000DA90),
 ]
 
 EXEC_MAGIC = 'execexec'[::-1]
 DONE_MAGIC = 'donedone'[::-1]
 MEMC_MAGIC = 'memcmemc'[::-1]
 MEMS_MAGIC = 'memsmems'[::-1]
-USB_READ_LIMIT  = 0x8000
+USB_READ_LIMIT  = 0x800
 CMD_TIMEOUT     = 5000
 AES_BLOCK_SIZE  = 16
 AES_ENCRYPT     = 16
@@ -80,7 +83,7 @@ class PwnedUSBDevice():
     assert len(data) % AES_BLOCK_SIZE == 0
     (retval, received) = self.execute(len(data), self.config.aes_crypto_cmd, action, self.cmd_data_address(7), self.cmd_data_address(0), len(data), key, 0, 0, data)
     assert retval & 0xFFFFFFFF == 0
-    return received[:len(data)]      
+    return received[:len(data)]
 
   def read_memory(self, address, length):
     data = str()
@@ -134,7 +137,7 @@ class PwnedUSBDevice():
     device = dfu.acquire_device()
     self.serial_number = device.serial_number
     dfu.release_device(device)
- 
+
     for dp in device_platform.all_platforms:
       if self.serial_number.startswith('CPID:%04x CPRV:%02x ' % (dp.cpid, dp.cprv)):
         self.platform = dp
