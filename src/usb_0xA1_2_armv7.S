@@ -9,8 +9,8 @@
 .set DONE_MAGIC,     0xBAD00003
 
 .code 16
-.global _main
-_main:
+.global _start
+_start:
 jump_back:
   BKPT #1
   BKPT #1

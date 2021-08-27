@@ -2,8 +2,8 @@
 
 .align 2
 
-.globl _main
-_main:
+.globl _start
+_start:
   MOV  X1, #0x180000000
   ADD  X2, X1, #0xA0000
   ADD  X1, X1, #0x625

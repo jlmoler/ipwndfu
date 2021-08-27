@@ -11,8 +11,8 @@
 .set usb_create_string_descriptor, 0xBAD00003
 
 .code 32
-.global _main
-_main:
+.global _start
+_start:
   MOV  R4, #0                 // HACK: do not free this usb request
   PUSH {R4-R7,LR}
 
@@ -56,7 +56,7 @@ find_zero_loop:
   STRB R0, [R4]
 
   LDR  R0, =PAYLOAD_DEST
-  ADR  R1, _main
+  ADR  R1, _start
   LDR  R2, =PAYLOAD_OFFSET
   ADD  R1, R1, R2
   MOV  R2, #0
@@ -91,7 +91,7 @@ copy_loop:
   BCC  copy_loop
 
   MOV  R0, #0
-  MCR  p15, 0, R0, c7, c5, 0 
+  MCR  p15, 0, R0, c7, c5, 0
   DSB
   ISB
 

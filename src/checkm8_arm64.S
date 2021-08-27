@@ -10,8 +10,8 @@
 .set gUSBDescriptors,              0xBAD00001
 .set usb_create_string_descriptor, 0xBAD00003
 
-.global _main
-_main:
+.global _start
+_start:
   MOV  X19, #0                      // HACK: do not free this usb request
   STP  X29, X30, [SP,#-0x10]!
   MOV  X29, SP
@@ -44,7 +44,7 @@ find_zero_loop:
   STRB W0, [X1]
 
   LDR  X0, =PAYLOAD_DEST
-  ADR  X1, _main
+  ADR  X1, _start
   LDR  X2, =PAYLOAD_OFFSET
   ADD  X1, X1, X2
   MOV  X2, #0

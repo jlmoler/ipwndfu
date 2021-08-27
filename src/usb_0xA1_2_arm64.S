@@ -8,8 +8,8 @@
 .set MEMS_MAGIC,     0xBAD00005
 .set DONE_MAGIC,     0xBAD00003
 
-.global _main
-_main:
+.global _start
+_start:
 jump_back:
   BRK  #1
   BRK  #1
@@ -30,27 +30,27 @@ jump_back:
   CMP  W1, W2
   BNE  request_done
 
-  LDR  X0, [X20]                               ; X0 = LOAD_ADDRESS[0]
+  LDR  X0, [X20]                               // X0 = LOAD_ADDRESS[0]
 
   LDR  X1, =EXEC_MAGIC
   CMP  X0, X1
-  BNE  not_exec                                ; if (X0 != EXEC_MAGIC) goto not_exec
+  BNE  not_exec                                // if (X0 != EXEC_MAGIC) goto not_exec
 
-  STR  XZR, [X20]                              ; LOAD_ADDRESS[0] = 0
+  STR  XZR, [X20]                              // LOAD_ADDRESS[0] = 0
 
-  LDR  X0, [X20, #0x10]                        ; X0 = LOAD_ADDRESS[2]      /* arg1 */
-  LDR  X1, [X20, #0x18]                        ; X1 = LOAD_ADDRESS[3]      /* arg2 */
-  LDR  X2, [X20, #0x20]                        ; X2 = LOAD_ADDRESS[4]      /* arg3 */
-  LDR  X3, [X20, #0x28]                        ; X3 = LOAD_ADDRESS[5]      /* arg4 */
-  LDR  X4, [X20, #0x30]                        ; X4 = LOAD_ADDRESS[6]      /* arg5 */
-  LDR  X5, [X20, #0x38]                        ; X5 = LOAD_ADDRESS[7]      /* arg6 */
-  LDR  X6, [X20, #0x40]                        ; X6 = LOAD_ADDRESS[8]      /* arg7 */
-  LDR  X7, [X20, #0x40]                        ; X7 = LOAD_ADDRESS[9]      /* arg8 */
+  LDR  X0, [X20, #0x10]                        // X0 = LOAD_ADDRESS[2]      /* arg1 */
+  LDR  X1, [X20, #0x18]                        // X1 = LOAD_ADDRESS[3]      /* arg2 */
+  LDR  X2, [X20, #0x20]                        // X2 = LOAD_ADDRESS[4]      /* arg3 */
+  LDR  X3, [X20, #0x28]                        // X3 = LOAD_ADDRESS[5]      /* arg4 */
+  LDR  X4, [X20, #0x30]                        // X4 = LOAD_ADDRESS[6]      /* arg5 */
+  LDR  X5, [X20, #0x38]                        // X5 = LOAD_ADDRESS[7]      /* arg6 */
+  LDR  X6, [X20, #0x40]                        // X6 = LOAD_ADDRESS[8]      /* arg7 */
+  LDR  X7, [X20, #0x40]                        // X7 = LOAD_ADDRESS[9]      /* arg8 */
   LDR  X8, [X20, #0x8]
-  BLR  X8                                      ; X0 = LOAD_ADDRESS[1](X0, X1, X2, X3, X4, X5, X6, X7)
+  BLR  X8                                      // X0 = LOAD_ADDRESS[1](X0, X1, X2, X3, X4, X5, X6, X7)
 
   LDR  X8, =DONE_MAGIC
-  STP  X8, X0, [X20]                           ; LOAD_ADDRESS[0,1] = DONE_MAGIC, X0
+  STP  X8, X0, [X20]                           // LOAD_ADDRESS[0,1] = DONE_MAGIC, X0
   B    request_done
 
 not_exec:
@@ -74,7 +74,7 @@ not_memc:
   BNE  request_done
 
   STR  XZR, [X20]
-  
+
   LDP  X0, X1, [X20, #0x10]
   LDR  X2, [X20, #0x20]
   BL   memset
@@ -136,7 +136,7 @@ memset_1:
 
 memset_done:
   MOV  X0, X3
-  RET 
+  RET
 
 memcpy:
   MOV  X4, X0
@@ -165,7 +165,7 @@ memcpy_4:
 memcpy_2:
   CMP  X2, #2
   B.CC memcpy_1
-  
+
   LDRH W3, [X1]
   STRH W3, [X0]
   ADD  X0, X0, #2

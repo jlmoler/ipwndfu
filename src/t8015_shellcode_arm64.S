@@ -5,8 +5,8 @@
 .set WRITE_ADDR,  0x180033538
 .set WRITE_VALUE,  0x9100C484
 
-.globl _main
-_main:
+.globl _start
+_start:
   MSR DAIFSET, #0xF
 
   LDR X5, =WRITE_ADDR
